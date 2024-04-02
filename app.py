@@ -4,6 +4,7 @@ import sys
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
+from tinytag import TinyTag
 
 #Debug logger
 import logging 
@@ -17,14 +18,25 @@ formatter = logging.Formatter(
 ch.setFormatter(formatter)
 root.addHandler(ch)
 
-
+import os
 def return_dict():
+    dict_here = []
+    i = 0
+    for filename in os.listdir("./music"):
+        f = os.path.join("./music", filename)
+        print(f)
+        if os.path.isfile(f):
+            i = i + 1
+            tag = TinyTag.get(f)
+            dict_here.append({'id': i, 'name': tag.title, 'link': 'music/'+filename, 'genre': tag.genre, 'artist': tag.artist})
+
+
     #Dictionary to store music file information
-    dict_here = [
-        {'id': 1, 'name': 'Acoustic Breeze', 'link': 'music/acousticbreeze.mp3', 'genre': 'General', 'chill out': 5},
-        {'id': 2, 'name': 'Happy Rock','link': 'music/happyrock.mp3', 'genre': 'Bollywood', 'rating': 4},
-        {'id': 3, 'name': 'Ukulele', 'link': 'music/ukulele.mp3', 'genre': 'Bollywood', 'rating': 4}
-        ]
+    # dict_here = [
+    #     {'id': 1, 'name': 'Acoustic Breeze', 'link': 'music/'+'acousticbreeze.mp3', 'genre': 'General', 'chill out': 5},
+    #     {'id': 2, 'name': 'Happy Rock','link': 'music/'+'happyrock.mp3', 'genre': 'Bollywood', 'rating': 4},
+    #     {'id': 3, 'name': 'Ukulele', 'link': 'music/'+'ukulele.mp3', 'genre': 'Bollywood', 'rating': 4}
+    #     ]
     return dict_here
 
 # Initialize Flask.
@@ -38,7 +50,7 @@ def show_entries():
         'title': 'Music Player'}
     print(return_dict())
     stream_entries = return_dict()
-    return render_template('simple.html', entries=stream_entries, **general_Data)
+    return render_template('design.html', entries=stream_entries, **general_Data)
 
 #Route to stream music
 @app.route('/<int:stream_id>')
