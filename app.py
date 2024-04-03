@@ -5,6 +5,9 @@ from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from tinytag import TinyTag
+from flask_socketio import SocketIO
+from time import sleep
+import threading
 
 #Debug logger
 import logging 
@@ -41,7 +44,7 @@ def return_dict():
 
 # Initialize Flask.
 app = Flask(__name__)
-
+socket = SocketIO(app)
 
 #Route to render GUI
 @app.route('/')
@@ -70,6 +73,23 @@ def streammp3(stream_id):
                 count += 1
                 
     return Response(generate(), mimetype="audio/mp3")
+@socket.on('connect')
+def on_connect(msg):
+    print('Server received connection')
+
+    t1 = threading.Thread(target=task)
+    t1.start()
+def task():
+    while(1):
+        socket.send("play")
+        sleep(5)
+        socket.send("pause")
+        sleep(5)
+    
+
+
+        
+
 
 #launch a Tornado server with HTTPServer.
 if __name__ == "__main__":
@@ -78,4 +98,5 @@ if __name__ == "__main__":
     logging.debug("Started Server, Kindly visit http://localhost:" + str(port))
     http_server.listen(port)
     IOLoop.instance().start()
+    socket.run(app)
     
