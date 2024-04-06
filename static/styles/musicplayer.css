@@ -14,7 +14,7 @@ body {
 h1 {
     margin: 0;
     font-size: 33px;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.6);
     padding: 0 10%;
 }
 
@@ -22,7 +22,7 @@ h3 {
     margin: 0;
     font-size: 17px;
     font-weight: 500;
-    color: #ccc;
+    color: rgba(255, 255, 255, 0.6);
     padding: 0 10%;
 }
 
@@ -44,8 +44,8 @@ h3 {
     height: 570px;
     margin: auto;
     margin-top: 6%;
-    border-radius: 0 0 10px 10px;
-    background: transparent linear-gradient(to bottom, rgba(10, 11, 31, 0.9) 50%, rgb(10, 11, 31) 70%) repeat scroll 0 0;
+    border-radius: 10px 10px 10px 10px;
+    background: transparent linear-gradient(to bottom, rgba(10, 11, 31, 0.8) 50%, rgba(10, 11, 31, 0.8) 70%) repeat scroll 0 0;
     box-shadow: 1px 10px 20px 5px #222;
 }
 
@@ -53,13 +53,18 @@ h3 {
     float: left;
     width: 100%;
 }
+.songMetaData{
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 22px;
+    font-weight: 500;
+}
 
 .lecteur {
     width: 100%;
     display: block;
     height: auto;
-    position: relative;
-    float: right;
+    display: flex;
+  justify-content: center;
 }
 
 .cover {
