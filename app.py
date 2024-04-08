@@ -8,7 +8,7 @@ from tinytag import TinyTag
 from flask_socketio import SocketIO
 from time import sleep
 import threading
-# from lib.hand_gesture_control import Main
+from lib.hand_gesture_control import Main
 
 #Debug logger
 import logging 
@@ -46,18 +46,23 @@ def return_dict():
 # Initialize Flask.
 app = Flask(__name__)
 socket = SocketIO(app)
-# mHandGesture = Main
-
-# mHandGesture.HandGestureCallback()
-
-# class MHandGestureCallback(Main.HandGestureCallback):
-#     def __init__(self):
-#         super().__init__()
-#     def onGestureReceive(mode, optional):
-#         socket.send("play")
 
 
-# mHandGestureCallback = MHandGestureCallback()
+
+class MusicController:
+    playOrPause = False
+
+    @staticmethod
+    def playAndPause():
+        
+        if MusicController.playOrPause:
+            socket.send("pause")
+            MusicController.playOrPause = False
+        else:
+            socket.send("play")
+            MusicController.playOrPause = True
+
+mHandGesture = Main.HandGesture(MusicController.playAndPause)
 
 #Route to render GUI
 @app.route('/')
@@ -93,10 +98,9 @@ def on_connect(msg):
     t1 = threading.Thread(target=task)
     t1.start()
 def task():
-    pass
-    
-    # mHandGesture.setHandGestureCallback(mHandGestureCallback)
-    # mHandGesture()
+    # pass
+
+    mHandGesture.run()
     # while(1):
     #     socket.send("play")
     #     sleep(5)
