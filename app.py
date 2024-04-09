@@ -61,6 +61,7 @@ class MusicController:
         else:
             socket.send("play")
             MusicController.playOrPause = True
+        sleep(0.2)
 
 mHandGesture = Main.HandGesture(MusicController.playAndPause)
 
@@ -69,19 +70,18 @@ mHandGesture = Main.HandGesture(MusicController.playAndPause)
 def show_entries():
     general_Data = {
         'title': 'Music Player'}
-    print(return_dict())
-    stream_entries = return_dict()
-    return render_template('design.html', entries=stream_entries, **general_Data)
+    # print(return_dict())
+    stream_entries = return_dict()[0] #remember to set this to return_dict()[i] to switch song
+    return render_template('design.html', entry=stream_entries, **general_Data)
 
 #Route to stream music
 @app.route('/<int:stream_id>')
 def streammp3(stream_id):
     def generate():
-        data = return_dict()
+        item = return_dict()[0] #remember to set this to return_dict()[i] to switch song
         count = 1
-        for item in data:
-            if item['id'] == stream_id:
-                song = item['link']
+        if item['id'] == stream_id:
+            song = item['link']
         with open(song, "rb") as fwav:
             data = fwav.read(1024)
             while data:
@@ -98,18 +98,7 @@ def on_connect(msg):
     t1 = threading.Thread(target=task)
     t1.start()
 def task():
-    # pass
-
     mHandGesture.run()
-    # while(1):
-    #     socket.send("play")
-    #     sleep(5)
-    #     socket.send("pause")
-    #     sleep(5)
-    
-
-
-        
 
 
 #launch a Tornado server with HTTPServer.
