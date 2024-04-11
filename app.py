@@ -9,6 +9,7 @@ from flask_socketio import SocketIO
 from time import sleep
 import threading
 from lib.hand_gesture_control import Main
+import json
 
 #Debug logger
 import logging 
@@ -25,14 +26,14 @@ root.addHandler(ch)
 import os
 def return_dict():
     dict_here = []
-    i = 0
+    i = 1
     for filename in os.listdir("./music"):
         f = os.path.join("./music", filename)
         print(f)
         if os.path.isfile(f):
-            i = i + 1
             tag = TinyTag.get(f)
             dict_here.append({'id': i, 'name': tag.title, 'link': 'music/'+filename, 'genre': tag.genre, 'artist': tag.artist})
+            i = i + 1
 
 
     #Dictionary to store music file information
@@ -77,8 +78,10 @@ def show_entries():
 #Route to stream music
 @app.route('/<int:stream_id>')
 def streammp3(stream_id):
-    def generate():
-        item = return_dict()[0] #remember to set this to return_dict()[i] to switch song
+    def generate(stream_id):
+        item = return_dict()[stream_id - 1] #remember to set this to return_dict()[i] to switch song
+        print(item)
+        print(item['id'])
         count = 1
         if item['id'] == stream_id:
             song = item['link']
@@ -90,16 +93,23 @@ def streammp3(stream_id):
                 logging.debug('Music data fragment : ' + str(count))
                 count += 1
                 
-    return Response(generate(), mimetype="audio/mp3")
+    return Response(generate(stream_id), mimetype="audio/mp3")
 @socket.on('connect')
 def on_connect(msg):
     print('Server received connection')
 
-    t1 = threading.Thread(target=task)
-    t1.start()
+    # t1 = threading.Thread(target=task)
+    # t1.start()
+
 def task():
     mHandGesture.run()
 
+@socket.on('message')
+def on_message(msg):
+    if (msg == "changeASong"):
+        # some JSON:
+        x =  '{ "type":"changeSong", "songId":3}'
+        socket.emit( 'message', json.loads(x) )
 
 #launch a Tornado server with HTTPServer.
 if __name__ == "__main__":

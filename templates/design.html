@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <button onclick="myFunction()">Click me</button> 
     <div class="container-fluid">
         <div id="sl">
             <div class="well">
@@ -72,8 +73,20 @@
                 } else {
                     pauseAudio()
                 }
-                socket.send("ok")
+
             })
+            socket.on('message', function changeSong(msg) {
+                    if(msg.type === "changeSong"){
+                        x.setAttribute('src', 'http://localhost:5000/' + msg.songId)
+                        x.setAttribute('type', 'audio/mp3')
+                        x.load()
+                        x.play()
+                    }
+                }
+            )
+            function myFunction() {
+                socket.send("changeASong")
+            }
         </script>
 
         </script>
