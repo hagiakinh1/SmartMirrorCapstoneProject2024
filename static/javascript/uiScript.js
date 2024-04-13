@@ -7,11 +7,11 @@ function updateTime() {
     const minutes = now.getMinutes();
 
     date = now.date
-    const dateStr = `${now.getFullYear()}//${now.getMonth() + 1}//${now.getDate()}`;
+    const dateStr = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
     // Format the string with leading zeroes
     const clockStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 
-    timeElement.innerText = clockStr;
+    timeElement.innerText = clockStr + " ";
     dateElement.innerText = dateStr;
 }
 
