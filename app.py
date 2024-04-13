@@ -98,7 +98,8 @@ def on_connect(msg):
     t1 = threading.Thread(target=task)
     t1.start()
 def task():
-    mHandGesture.run()
+    pass
+    # mHandGesture.run()
 
 
 #launch a Tornado server with HTTPServer.
