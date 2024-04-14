@@ -52,6 +52,8 @@ socket = SocketIO(app)
 
 class MusicController:
     playOrPause = False
+    currentSongIndex=1
+    debounceTime = 0.3
 
     @staticmethod
     def playAndPause():
@@ -62,9 +64,26 @@ class MusicController:
         else:
             socket.send("play")
             MusicController.playOrPause = True
-        sleep(0.2)
-
-mHandGesture = Main.HandGesture(MusicController.playAndPause)
+        sleep(MusicController.debounceTime)
+    @staticmethod
+    def nextSong():
+        if MusicController.currentSongIndex < len(return_dict()):
+            MusicController.currentSongIndex = MusicController.currentSongIndex + 1
+            x =  '''{ "type":"changeSong", "songId":"''' + str(MusicController.currentSongIndex) + '''"}'''
+            socket.emit( 'message', json.loads(x) )
+        else :
+            MusicController.currentSongIndex = 1
+            x =  '''{ "type":"changeSong", "songId":"''' + str(MusicController.currentSongIndex) + '''"}'''
+            socket.emit( 'message', json.loads(x) )
+        sleep(MusicController.debounceTime)
+    @staticmethod
+    def previousSong():
+        if MusicController.currentSongIndex > 1:
+            MusicController.currentSongIndex = MusicController.currentSongIndex - 1
+            x =  '''{ "type":"changeSong", "songId":"''' + str(MusicController.currentSongIndex) + '''"}'''
+            socket.emit( 'message', json.loads(x) )
+        sleep(MusicController.debounceTime)
+mHandGesture = Main.HandGesture(MusicController.playAndPause, MusicController.nextSong, MusicController.previousSong)
 
 #Route to render GUI
 @app.route('/')
@@ -98,23 +117,23 @@ def streammp3(stream_id):
 def on_connect(msg):
     print('Server received connection')
 
-    # t1 = threading.Thread(target=task)
-    # t1.start()
+    t1 = threading.Thread(target=task)
+    t1.start()
 
 def task():
     # pass
     mHandGesture.run()
 
-currentSongIndex = 1
+# currentSongIndex = 1
 
-@socket.on('message')
-def on_message(msg):
-    global currentSongIndex
-    currentSongIndex = currentSongIndex + 1
-    if (msg == "changeASong"):
-        # some JSON:
-        x =  '''{ "type":"changeSong", "songId":"''' + str(currentSongIndex) + '''"}'''
-        socket.emit( 'message', json.loads(x) )
+# @socket.on('message')
+# def on_message(msg):
+#     global currentSongIndex
+#     currentSongIndex = currentSongIndex + 1
+#     if (msg == "changeASong"):
+#         # some JSON:
+#         x =  '''{ "type":"changeSong", "songId":"''' + str(currentSongIndex) + '''"}'''
+#         socket.emit( 'message', json.loads(x) )
 
 #launch a Tornado server with HTTPServer.
 if __name__ == "__main__":
