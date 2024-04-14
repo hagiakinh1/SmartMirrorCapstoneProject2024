@@ -34,14 +34,6 @@ def return_dict():
             tag = TinyTag.get(f)
             dict_here.append({'id': i, 'name': tag.title, 'link': 'music/'+filename, 'genre': tag.genre, 'artist': tag.artist})
             i = i + 1
-
-
-    #Dictionary to store music file information
-    # dict_here = [
-    #     {'id': 1, 'name': 'Acoustic Breeze', 'link': 'music/'+'acousticbreeze.mp3', 'genre': 'General', 'chill out': 5},
-    #     {'id': 2, 'name': 'Happy Rock','link': 'music/'+'happyrock.mp3', 'genre': 'Bollywood', 'rating': 4},
-    #     {'id': 3, 'name': 'Ukulele', 'link': 'music/'+'ukulele.mp3', 'genre': 'Bollywood', 'rating': 4}
-    #     ]
     return dict_here
 
 # Initialize Flask.
@@ -121,26 +113,9 @@ def on_connect(msg):
     t1.start()
 
 def task():
-    # pass
     mHandGesture.run()
 
-# currentSongIndex = 1
 
-# @socket.on('message')
-# def on_message(msg):
-#     global currentSongIndex
-#     currentSongIndex = currentSongIndex + 1
-#     if (msg == "changeASong"):
-#         # some JSON:
-#         x =  '''{ "type":"changeSong", "songId":"''' + str(currentSongIndex) + '''"}'''
-#         socket.emit( 'message', json.loads(x) )
-
-#launch a Tornado server with HTTPServer.
 if __name__ == "__main__":
-    # port = 5000
-    # http_server = HTTPServer(WSGIContainer(app))
-    # logging.debug("Started Server, Kindly visit http://localhost:" + str(port))
-    # http_server.listen(port)
-    # IOLoop.instance().start()
     socket.run(app)
     
