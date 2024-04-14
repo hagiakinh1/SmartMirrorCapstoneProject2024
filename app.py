@@ -32,7 +32,8 @@ def return_dict():
         print(f)
         if os.path.isfile(f):
             tag = TinyTag.get(f)
-            dict_here.append({'id': i, 'name': tag.title, 'link': 'music/'+filename, 'genre': tag.genre, 'artist': tag.artist})
+            dict_here.append({ "id": i, "name": tag.title, "link": "music/"+filename, "genre": tag.genre, "artist": tag.artist})
+            print(dict_here)
             i = i + 1
     return dict_here
 
@@ -61,20 +62,26 @@ class MusicController:
     def nextSong():
         if MusicController.currentSongIndex < len(return_dict()):
             MusicController.currentSongIndex = MusicController.currentSongIndex + 1
-            x =  '''{ "type":"changeSong", "songId":"''' + str(MusicController.currentSongIndex) + '''"}'''
-            socket.emit( 'message', json.loads(x) )
         else :
             MusicController.currentSongIndex = 1
-            x =  '''{ "type":"changeSong", "songId":"''' + str(MusicController.currentSongIndex) + '''"}'''
-            socket.emit( 'message', json.loads(x) )
+        x =  '''{ "type":"changeSong", "songId":"''' + str(MusicController.currentSongIndex) + '''"}'''
+        socket.emit( 'message', json.loads(x))
+        
+        
         sleep(MusicController.debounceTime)
+    
     @staticmethod
     def previousSong():
         if MusicController.currentSongIndex > 1:
             MusicController.currentSongIndex = MusicController.currentSongIndex - 1
             x =  '''{ "type":"changeSong", "songId":"''' + str(MusicController.currentSongIndex) + '''"}'''
-            socket.emit( 'message', json.loads(x) )
+            socket.emit( 'message', json.loads(x))
+            
         sleep(MusicController.debounceTime)
+    @staticmethod
+    def updateSongMetadata():
+        socket.emit( 'updateMetaData', json.loads(json.dumps(return_dict()[MusicController.currentSongIndex -1])) )    
+        # socket.send("asdnajsdk")
 mHandGesture = Main.HandGesture(MusicController.playAndPause, MusicController.nextSong, MusicController.previousSong)
 
 #Route to render GUI
@@ -84,6 +91,8 @@ def show_entries():
         'title': 'Music Player'}
     # print(return_dict())
     stream_entries = return_dict()[0] #remember to set this to return_dict()[i] to switch song
+    socket.emit( 'updateMetaData', json.loads(json.dumps(stream_entries)) )
+    print(json.loads(json.dumps(stream_entries)))
     return render_template('design.html', entry=stream_entries, **general_Data)
 
 #Route to stream music
@@ -91,8 +100,6 @@ def show_entries():
 def streammp3(stream_id):
     def generate(stream_id):
         item = return_dict()[stream_id - 1] #remember to set this to return_dict()[i] to switch song
-        print(item)
-        print(item['id'])
         count = 1
         if item['id'] == stream_id:
             song = item['link']
@@ -112,6 +119,10 @@ def on_connect(msg):
     t1 = threading.Thread(target=task)
     t1.start()
 
+@socket.on('message')
+def onSongChange(msg):
+    if msg == "onSongChange":
+        MusicController.updateSongMetadata()
 def task():
     mHandGesture.run()
 

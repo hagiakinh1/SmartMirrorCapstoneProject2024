@@ -42,14 +42,14 @@
                     </div>
                     <div class="titre">
                         <div class="songMetaData">Name :</div>
-                        <h3>{{ entry.name }}</h3>
+                        <h3 id = 'songTitle'>none</h3>
                         <div>
                             <div class="songMetaData">Genre :</div>
-                            <h3>{{ entry.genre }}</h3>
+                            <h3 id = 'songGenre'>none</h3>
                         </div>
                         <div>
                             <div class="songMetaData">Rating :</div>
-                            <h3>{{entry.rating }}</h3>
+                            <h3 id = 'artistName'>none</h3>
                         </div>
                     </div>
 
@@ -97,9 +97,20 @@
                         x.setAttribute('type', 'audio/mp3')
                         x.load()
                         x.play()
+                        socket.send("onSongChange")
                     }
                 }
             )
+            socket.on('updateMetaData', function updateMetaData(msg){
+                
+                    var songTitle = document.getElementById("songTitle"); 
+                    var songGenre = document.getElementById("songGenre");
+                    var artistName = document.getElementById("artistName");
+                    songTitle.innerText=msg.name
+                    songGenre.innerText=msg.genre
+                    artistName.innerText=msg.artist
+                
+            })
         </script>
 
         </script>
