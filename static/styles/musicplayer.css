@@ -25,25 +25,51 @@ h3 {
     color: rgba(255, 255, 255, 0.6);
     padding: 0 10%;
 }
+.dateTime{
+    margin-top: 3%;
+    display: flex;
+    justify-content: center;
+}
 
 .container-fluid {
     display: block;
-    width: 100%;
-    height: 750px;
     margin: auto;
     overflow: hidden;
     background-image: url("https://mariongrandvincent.github.io/HTML-Personal-website/img-codePen/bg-music-player.jpg");
     background-repeat: repeat;
     background-size: cover;
+    /* Set rules to fill background */
+    min-height: 100%;
+    min-width: 1024px;
+
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+
+    /* Set up positioning */
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+@media screen and (max-width: 1024px) { /* Specific to this particular image */
+    .container-fluid {
+      left: 50%;
+      margin-left: -512px;   /* 50% */
+    }
+  }
+
+.well {
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
-.row {
-    display: block;
+.well>.row {
+    float: right;
     position: relative;
     width: 400px;
     height: 570px;
     margin: auto;
-    margin-top: 6%;
     border-radius: 10px 10px 10px 10px;
     background: transparent linear-gradient(to bottom, rgba(10, 11, 31, 0.8) 50%, rgba(10, 11, 31, 0.8) 70%) repeat scroll 0 0;
     box-shadow: 1px 10px 20px 5px #222;
@@ -53,7 +79,8 @@ h3 {
     float: left;
     width: 100%;
 }
-.songMetaData{
+
+.songMetaData {
     color: rgba(255, 255, 255, 0.5);
     font-size: 22px;
     font-weight: 500;
@@ -64,7 +91,7 @@ h3 {
     display: block;
     height: auto;
     display: flex;
-  justify-content: center;
+    justify-content: center;
 }
 
 .cover {
@@ -81,4 +108,22 @@ h3 {
     width: 70%;
     margin: auto;
     text-align: center;
+}
+
+.well>.thoitiet {
+    float: left;
+    width: 30%;
+}
+
+#otiet {
+    background: #fff;
+    padding: 10px;
+    width: 30%;
+    border: none;
+}
+
+#timtiet {
+    background: #666;
+    border: none;
+    color: #fff;
 }

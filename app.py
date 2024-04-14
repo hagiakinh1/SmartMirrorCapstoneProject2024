@@ -102,6 +102,7 @@ def on_connect(msg):
     # t1.start()
 
 def task():
+    # pass
     mHandGesture.run()
 
 @socket.on('message')
