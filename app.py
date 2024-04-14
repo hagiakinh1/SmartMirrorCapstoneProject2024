@@ -105,19 +105,23 @@ def task():
     # pass
     mHandGesture.run()
 
+currentSongIndex = 1
+
 @socket.on('message')
 def on_message(msg):
+    global currentSongIndex
+    currentSongIndex = currentSongIndex + 1
     if (msg == "changeASong"):
         # some JSON:
-        x =  '{ "type":"changeSong", "songId":3}'
+        x =  '''{ "type":"changeSong", "songId":"''' + str(currentSongIndex) + '''"}'''
         socket.emit( 'message', json.loads(x) )
 
 #launch a Tornado server with HTTPServer.
 if __name__ == "__main__":
-    port = 5000
-    http_server = HTTPServer(WSGIContainer(app))
-    logging.debug("Started Server, Kindly visit http://localhost:" + str(port))
-    http_server.listen(port)
-    IOLoop.instance().start()
+    # port = 5000
+    # http_server = HTTPServer(WSGIContainer(app))
+    # logging.debug("Started Server, Kindly visit http://localhost:" + str(port))
+    # http_server.listen(port)
+    # IOLoop.instance().start()
     socket.run(app)
     

@@ -56,7 +56,7 @@
                     </div>
 
                     <div class="lecteur">
-                        <audio id="myAudio" controls="" src="http://localhost:5000/{{ entry.id }}" type="audio/mp3">
+                        <audio id="myAudio" controls="" src="http://127.0.0.1:5000/{{ entry.id }}" type="audio/mp3">
                         </audio>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
             })
             socket.on('message', function changeSong(msg) {
                     if(msg.type === "changeSong"){
-                        x.setAttribute('src', 'http://localhost:5000/' + msg.songId)
+                        x.setAttribute('src', 'http://127.0.0.1:5000/' + msg.songId)
                         x.setAttribute('type', 'audio/mp3')
                         x.load()
                         x.play()
