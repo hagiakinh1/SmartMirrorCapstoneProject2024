@@ -84,10 +84,7 @@ class MusicController:
         socket.emit( 'updateMetaData', json.loads(json.dumps(return_dict()[MusicController.currentSongIndex -1])) )    
         # socket.send("asdnajsdk")
 mHandGesture = Main.HandGesture(MusicController.playAndPause, MusicController.nextSong, MusicController.previousSong)
-@app.after_request
-def set_headers(response):
-    response.headers["Referrer-Policy"] = 'no-referrer-when-downgrade'
-    return response
+
 #Route to render GUI
 @app.route('/')
 def show_entries():
