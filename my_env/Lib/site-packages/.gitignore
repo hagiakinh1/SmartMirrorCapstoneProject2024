@@ -1,0 +1,4 @@
+**/__pycache__/           # my understanding is that this would ignore all pycache   
+                            recursively  
+!**/migrations/           # i thought this would exclude the migrations directory and  
+                            its  sub-directories anywhere within main
