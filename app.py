@@ -10,6 +10,7 @@ from time import sleep
 import threading
 from lib.hand_gesture_control import Main
 import json
+from lib.LlmChatBot.LlmChatBot import AskChatBot
 
 #Debug logger
 import logging 
@@ -119,14 +120,20 @@ def on_connect(msg):
     print('Server received connection')
 
     t1 = threading.Thread(target=task)
+    # t2 = threading.Thread(target=task1)
+    
     t1.start()
-
+    # t2.start()
 @socket.on('message')
 def onSongChange(msg):
     if msg == "onSongChange":
         MusicController.updateSongMetadata()
 def task():
     mHandGesture.run()
+# def task1():
+#     askChatBot = AskChatBot()
+#     askChatBot.ask("what the fuck?")
+#     askChatBot.getAnswer()
 
 
 if __name__ == "__main__":
