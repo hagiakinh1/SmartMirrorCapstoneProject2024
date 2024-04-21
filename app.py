@@ -8,9 +8,9 @@ from tinytag import TinyTag
 from flask_socketio import SocketIO
 from time import sleep
 import threading
-from lib.hand_gesture_control import Main
+from lib.HandGestureControl import Main
 import json
-from lib.LlmChatBot.LlmChatBot import AskChatBot
+# from lib.LlmChatBot.LlmChatBot import AskChatBot
 
 #Debug logger
 import logging 
