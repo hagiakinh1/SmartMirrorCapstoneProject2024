@@ -4,7 +4,7 @@ let weather = {
         fetch(
             "https://api.openweathermap.org/data/2.5/weather?q=" +
             city +
-            "&lang=vi&units=metric&appid=" +
+            "&lang=en&units=metric&appid=" +
             this.apiKey
         )
             .then((response) => {
@@ -26,24 +26,25 @@ let weather = {
         document.querySelector(".description").innerText = description;
         document.querySelector(".temp").innerText = temp + "°C";
         document.querySelector(".humidity").innerText =
-            "Độ ẩm: " + humidity + "%";
+            "Humidity: " + humidity + "%";
         document.querySelector(".wind").innerText =
-            "Gió: " + speed + " km/h";
+            "Wind speed: " + speed + " km/h";
     },
     search: function () {
         this.fetchWeather(document.querySelector(".search-bar").value);
     },
 };
 
-document.querySelector(".searchtiet button").addEventListener("click", function () {
-    weather.search();
-});
+// document.querySelector(".searchtiet button").addEventListener("click", function () {
+//     weather.search();
+// });
 
-document
-    .querySelector(".search-bar")
-    .addEventListener("keyup", function (event) {
-        if (event.key == "Enter") {
-            weather.search();
-        }
-    });
+// document
+//     .querySelector(".search-bar")
+//     .addEventListener("keyup", function (event) {
+//         if (event.key == "Enter") {
+//             weather.search();
+//         }
+//     });
 weather.fetchWeather("ho chi minh");
+weather.search();

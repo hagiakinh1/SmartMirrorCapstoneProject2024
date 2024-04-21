@@ -14,7 +14,7 @@ body {
 h1 {
     margin: 0;
     font-size: 33px;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255);
     padding: 0 10%;
 }
 
@@ -22,11 +22,14 @@ h3 {
     margin: 0;
     font-size: 17px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255);
     padding: 0 10%;
 }
 .dateTime{
-    margin-top: 3%;
+    font-size: 40px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: rgba(255, 255, 255);
+    font-weight: 600;
     display: flex;
     justify-content: center;
 }
@@ -35,7 +38,7 @@ h3 {
     display: block;
     margin: auto;
     overflow: hidden;
-    background-image: url("https://mariongrandvincent.github.io/HTML-Personal-website/img-codePen/bg-music-player.jpg");
+    background-image: url("https://i.pinimg.com/236x/d4/32/89/d43289c071866276d5f3148a77a9de7c.jpg");
     background-repeat: repeat;
     background-size: cover;
     /* Set rules to fill background */
@@ -81,7 +84,7 @@ h3 {
 }
 
 .songMetaData {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255);
     font-size: 22px;
     font-weight: 500;
 }
@@ -126,4 +129,10 @@ h3 {
     background: #666;
     border: none;
     color: #fff;
+}
+.weather_loading{
+    font-size: 25px;
+    font-weight: 500;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: rgba(255, 255, 255);
 }
