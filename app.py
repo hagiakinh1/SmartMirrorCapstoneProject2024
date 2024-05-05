@@ -128,14 +128,33 @@ def on_connect(msg):
 def onSongChange(msg):
     if msg == "onSongChange":
         MusicController.updateSongMetadata()
+@socket.on('searchForSong')
+def onSearchingForYoutubeSong(msg):
+    # socket.send("server received message : " + msg["songName"])
+    import re, requests, urllib.parse, urllib.request
+    from bs4 import BeautifulSoup
+
+    music_name = msg["songName"]
+    query_string = urllib.parse.urlencode({"search_query": music_name})
+    formatUrl = urllib.request.urlopen("https://www.youtube.com/results?" + query_string)
+
+    search_results = re.findall(r"watch\?v=(\S{11})", formatUrl.read().decode())
+    clip = requests.get("https://www.youtube.com/watch?v=" + "{}".format(search_results[0]))
+    clip2 = "https://www.youtube.com/watch?v=" + "{}".format(search_results[0])
+
+    inspect = BeautifulSoup(clip.content, "html.parser")
+    yt_title = inspect.find_all("meta", property="og:title")
+    def parseYoutubeURL( url:str)->str:
+        data = re.findall(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", url)
+        if data:
+            return data[0]
+        return ""
+
+    socket.emit("youtubeSongUrl", json.loads(json.dumps({"youtubeSongUrl" : parseYoutubeURL(clip2), "yt_title" : yt_title[0]['content']})))
 def task():
     mHandGesture.run()
-# def task1():
-#     askChatBot = AskChatBot()
-#     askChatBot.ask("what the fuck?")
-#     askChatBot.getAnswer()
-
 
 if __name__ == "__main__":
+    app.run(host="localhost", port=5000)
     socket.run(app)
     
