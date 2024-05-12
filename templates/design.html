@@ -15,8 +15,13 @@
 
 <body>
     <div class="container-fluid">
-        <div class="dateTime" >
-            <p id="clock"></p><p>&nbsp;</p>
+        <div class="dateTime">
+            <form onsubmit="submitSearchForYoutubeVid(event)">
+                <input type="text" name="song">
+                <input type="submit" value="search">
+            </form>
+            <p id="clock"></p>
+            <p>&nbsp;</p>
             <p id="date"></p>
         </div>
         <div id="sl">
@@ -42,19 +47,11 @@
                     </div>
                     <div class="titre">
                         <div class="songMetaData">Name :</div>
-                        <h3 id = 'songTitle'>none</h3>
-                        <div>
-                            <div class="songMetaData">Genre :</div>
-                            <h3 id = 'songGenre'>none</h3>
-                        </div>
-                        <div>
-                            <div class="songMetaData">Rating :</div>
-                            <h3 id = 'artistName'>none</h3>
-                        </div>
+                        <h3 id='songTitle'>none</h3>
                     </div>
-
                     <div class="lecteur">
-                        <audio id="myAudio" controls="" src="http://127.0.0.1:5000/{{ entry.id }}" type="audio/mp3">
+                        <div data-video="DcCISK3sCYg" data-autoplay="0" data-loop="1" id="youtube-audio"></div>
+                        <!-- <audio id="myAudio" controls="" src="http://localhost:5000/{{ entry.id }}" type="audio/mp3"> -->
                         </audio>
                     </div>
                 </div>
@@ -67,15 +64,15 @@
         </div>
 
         </div>
+        <script type="text/javascript" src="{{ url_for('static',filename='javascript/youtubeSong.js') }}"> </script>
         <script>
-            i = 0
-            var x = document.getElementById("myAudio");
+
             function playAudio() {
-                x.play();
+                player.playVideo()
             }
 
             function pauseAudio() {
-                x.pause();
+                player.pauseVideo()
             }
             var socket = io()
             socket.connect('https://127.0.0.1:5000/')
@@ -92,33 +89,39 @@
 
             })
             socket.on('message', function changeSong(msg) {
-                    if(msg.type === "changeSong"){
-                        x.setAttribute('src', 'http://127.0.0.1:5000/' + msg.songId)
-                        x.setAttribute('type', 'audio/mp3')
-                        x.load()
-                        x.play()
-                        socket.send("onSongChange")
+                if (msg.type === "changeSong") {
+                    if (msg.nextOrPrevious === "next") {
+                        player.nextVideo()
+                    } else {
+                        player.previousVideo()
                     }
+                    // socket.send("onSongChange")
                 }
+            }
             )
-            socket.on('updateMetaData', function updateMetaData(msg){
-                
-                    var songTitle = document.getElementById("songTitle"); 
-                    var songGenre = document.getElementById("songGenre");
-                    var artistName = document.getElementById("artistName");
-                    songTitle.innerText=msg.name
-                    songGenre.innerText=msg.genre
-                    artistName.innerText=msg.artist
-                
-            })
-        </script>
 
+            function submitSearchForYoutubeVid(event) {
+                event.preventDefault();
+                console.log(event.target["song"].value)
+                socket.emit("searchForSong", { songName: event.target["song"].value })
+            }
+            socket.on('youtubeSongUrl', function (msg) {
+
+                console.log(msg.youtubeSongUrl)
+                var ctrlq = document.getElementById("youtube-audio");
+                ctrlq.dataset.video = msg.youtubeSongUrl
+                var songTitle = document.getElementById("songTitle");
+                songTitle.innerText = msg.yt_title
+                onYouTubeIframeAPIReady()
+
+            })
         </script>
         <script type="text/javascript" src="app.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static',filename='javascript/dateTime.js') }}"> </script>
         <script type="text/javascript" src="{{ url_for('static',filename='javascript/weather.js') }}"> </script>
+
 </body>
 
 </html>
